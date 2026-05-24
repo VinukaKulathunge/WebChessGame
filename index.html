@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A dark brutalist AI Chess Web App with multiple difficulty levels, time controls, and engine analysis." />
+  <title>BRUTAL CHESS — AI Chess Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       SETUP MODAL OVERLAY
+  ═══════════════════════════════════════════════ -->
+  <div id="setup-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-panel">
+
+      <div class="modal-header">
+        <div class="modal-logo">♟</div>
+        <h1 id="modal-title" class="modal-title">BRUTAL CHESS</h1>
+        <p class="modal-subtitle">Configure your match before entering the board.</p>
+      </div>
+
+      <!-- Color Selection -->
+      <div class="config-group" id="config-color">
+        <label class="config-label">PLAY AS</label>
+        <div class="config-options" role="radiogroup" aria-label="Choose your color">
+          <button id="color-white" class="option-btn active" data-value="white" aria-pressed="true">
+            <span class="option-icon">♔</span>
+            <span>WHITE</span>
+          </button>
+          <button id="color-random" class="option-btn" data-value="random" aria-pressed="false">
+            <span class="option-icon">⚄</span>
+            <span>RANDOM</span>
+          </button>
+          <button id="color-black" class="option-btn" data-value="black" aria-pressed="false">
+            <span class="option-icon">♚</span>
+            <span>BLACK</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Difficulty Selection -->
+      <div class="config-group" id="config-difficulty">
+        <label class="config-label">DIFFICULTY</label>
+        <div class="config-options" role="radiogroup" aria-label="Choose difficulty">
+          <button id="diff-easy" class="option-btn" data-value="easy" aria-pressed="false">
+            <span class="option-icon">◎</span>
+            <span>EASY</span>
+          </button>
+          <button id="diff-medium" class="option-btn active" data-value="medium" aria-pressed="true">
+            <span class="option-icon">◉</span>
+            <span>MEDIUM</span>
+          </button>
+          <button id="diff-hard" class="option-btn" data-value="hard" aria-pressed="false">
+            <span class="option-icon">⬟</span>
+            <span>HARD</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Time Control Selection -->
+      <div class="config-group" id="config-time">
+        <label class="config-label">TIME CONTROL</label>
+        <div class="config-options time-options" role="radiogroup" aria-label="Choose time control">
+          <button id="time-unlimited" class="option-btn active" data-value="unlimited" aria-pressed="true">
+            <span class="option-icon">∞</span>
+            <span>UNLIMITED</span>
+          </button>
+          <button id="time-1m" class="option-btn" data-value="1" aria-pressed="false">
+            <span class="option-icon">⏱</span>
+            <span>1 MIN</span>
+          </button>
+          <button id="time-3m" class="option-btn" data-value="3" aria-pressed="false">
+            <span class="option-icon">⏱</span>
+            <span>3 MIN</span>
+          </button>
+          <button id="time-5m" class="option-btn" data-value="5" aria-pressed="false">
+            <span class="option-icon">⏱</span>
+            <span>5 MIN</span>
+          </button>
+          <button id="time-10m" class="option-btn" data-value="10" aria-pressed="false">
+            <span class="option-icon">⏱</span>
+            <span>10 MIN</span>
+          </button>
+        </div>
+      </div>
+
+      <button id="start-game-btn" class="start-btn" aria-label="Start game">
+        <span>START MATCH</span>
+        <span class="start-btn-arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN APP LAYOUT
+  ═══════════════════════════════════════════════ -->
+  <div id="app" class="app-container hidden">
+
+    <!-- TOP HEADER BAR -->
+    <header class="app-header" role="banner">
+      <div class="header-brand">
+        <span class="header-logo">♟</span>
+        <span class="header-title">BRUTAL CHESS</span>
+      </div>
+      <nav class="header-controls" aria-label="Game controls">
+        <button id="btn-new-game" class="header-btn" title="New Game">NEW GAME</button>
+        <button id="btn-flip-board" class="header-btn" title="Flip Board">FLIP</button>
+        <button id="btn-analysis-mode" class="header-btn" title="Toggle Analysis Mode">ANALYSIS</button>
+        <button id="btn-offer-draw" class="header-btn" title="Offer Draw">DRAW</button>
+        <button id="btn-resign" class="header-btn danger-btn" title="Resign">RESIGN</button>
+      </nav>
+    </header>
+
+    <!-- MAIN GAME AREA -->
+    <main class="game-layout" role="main">
+
+      <!-- Centered content block: eval bar | board | sidebar -->
+      <div class="game-body">
+
+        <!-- LEFT SIDEBAR: Evaluation Bar -->
+        <aside class="sidebar-left" aria-label="Evaluation bar">
+          <div class="eval-bar-container" id="eval-bar-container" title="Engine evaluation">
+            <div class="eval-bar-track">
+              <div class="eval-bar-fill" id="eval-bar-fill"></div>
+            </div>
+            <div class="eval-score" id="eval-score">0.0</div>
+          </div>
+          <div class="eval-label top-label">WHITE</div>
+          <div class="eval-label bot-label">BLACK</div>
+        </aside>
+
+        <!-- CENTER: Board Column -->
+        <div class="board-column">
+
+          <!-- Black Player Info -->
+          <div class="player-bar" id="player-bar-black">
+            <div class="player-info">
+              <span class="player-icon">♚</span>
+              <span class="player-name" id="player-name-black">ENGINE</span>
+              <div class="captured-pieces" id="captured-by-black" aria-label="Pieces captured by Black"></div>
+            </div>
+            <div class="player-clock" id="clock-black" aria-label="Black's remaining time">--:--</div>
+          </div>
+
+          <!-- Chess Board -->
+          <div class="board-wrapper" id="board-wrapper">
+            <div class="board-coords-files" id="coords-files-top" aria-hidden="true"></div>
+            <div class="board-main-row">
+              <div class="board-coords-ranks" id="coords-ranks-left" aria-hidden="true"></div>
+              <div id="chess-board" class="chess-board" role="grid" aria-label="Chess Board"></div>
+              <div class="board-coords-ranks" id="coords-ranks-right" aria-hidden="true"></div>
+            </div>
+            <div class="board-coords-files" id="coords-files-bottom" aria-hidden="true"></div>
+          </div>
+
+          <!-- White Player Info -->
+          <div class="player-bar" id="player-bar-white">
+            <div class="player-info">
+              <span class="player-icon">♔</span>
+              <span class="player-name" id="player-name-white">YOU</span>
+              <div class="captured-pieces" id="captured-by-white" aria-label="Pieces captured by White"></div>
+            </div>
+            <div class="player-clock" id="clock-white" aria-label="White's remaining time">--:--</div>
+          </div>
+
+          <!-- Board Status Bar -->
+          <div class="status-bar" id="status-bar" role="status" aria-live="polite">
+            <span id="status-text">SELECT YOUR MOVE</span>
+          </div>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR: Move Log & Engine Lines -->
+        <aside class="sidebar-right" aria-label="Game information panel">
+
+          <!-- Engine Lines Panel -->
+          <div class="panel engine-panel">
+            <div class="panel-header">
+              <span class="panel-title">ENGINE LINES</span>
+              <span class="panel-badge" id="engine-depth-badge">DEPTH --</span>
+            </div>
+            <div class="engine-lines-list" id="engine-lines-list" aria-label="Engine analysis lines">
+              <div class="engine-line-placeholder">Engine analysis will appear here.</div>
+            </div>
+          </div>
+
+          <!-- Move Log Panel -->
+          <div class="panel move-log-panel">
+            <div class="panel-header">
+              <span class="panel-title">MOVE LOG</span>
+              <div class="move-log-controls">
+                <button id="btn-move-start" class="log-nav-btn" title="Go to start" aria-label="Go to start">⏮</button>
+                <button id="btn-move-prev" class="log-nav-btn" title="Previous move" aria-label="Previous move">◀</button>
+                <button id="btn-move-next" class="log-nav-btn" title="Next move" aria-label="Next move">▶</button>
+                <button id="btn-move-end" class="log-nav-btn" title="Go to end" aria-label="Go to end">⏭</button>
+              </div>
+            </div>
+            <div class="move-log-scroll" id="move-log-scroll" role="log" aria-label="Move history" aria-live="polite">
+              <div class="move-log-empty">No moves yet.</div>
+            </div>
+          </div>
+
+          <!-- Game Result Panel (hidden by default) -->
+          <div class="panel result-panel hidden" id="result-panel">
+            <div class="result-title" id="result-title">GAME OVER</div>
+            <div class="result-detail" id="result-detail"></div>
+            <button id="btn-rematch" class="start-btn small-btn">REMATCH</button>
+          </div>
+
+        </aside>
+
+      </div><!-- /.game-body -->
+    </main>
+
+    <!-- PAWN PROMOTION MODAL -->
+    <div id="promotion-modal" class="promotion-overlay hidden" role="dialog" aria-modal="true" aria-label="Choose promotion piece">
+      <div class="promotion-panel">
+        <p class="promotion-title">PROMOTE PAWN</p>
+        <div class="promotion-choices" id="promotion-choices">
+          <button class="promo-btn" id="promo-queen"  data-piece="q" aria-label="Promote to Queen">♛</button>
+          <button class="promo-btn" id="promo-rook"   data-piece="r" aria-label="Promote to Rook">♜</button>
+          <button class="promo-btn" id="promo-bishop" data-piece="b" aria-label="Promote to Bishop">♝</button>
+          <button class="promo-btn" id="promo-knight" data-piece="n" aria-label="Promote to Knight">♞</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCRIPTS — ES6 Modules
+  ═══════════════════════════════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+
+</body>
+</html>
