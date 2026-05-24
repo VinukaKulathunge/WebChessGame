@@ -1,4 +1,4 @@
-# ♟ BRUTAL CHESS
+# BRUTAL CHESS
 
 A fully-featured, modular AI Chess Web App built with **vanilla JavaScript ES6 modules** and a **dark brutalist** aesthetic. Powered by Stockfish 10 for engine analysis.
 
@@ -6,26 +6,26 @@ A fully-featured, modular AI Chess Web App built with **vanilla JavaScript ES6 m
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | Details |
 |---|---|
-| 🤖 **AI Opponent** | Stockfish 10 via Web Worker — UI never freezes |
-| 🎚 **Difficulty** | Easy (100ms) · Medium (500ms) · Hard (2000ms) think time |
-| ⏱ **Time Controls** | Unlimited · 1 · 3 · 5 · 10 minute clocks (RAF-based, no drift) |
-| 🎨 **Color Choice** | Play as White, Black, or Random |
-| 📊 **Eval Bar** | Live centipawn evaluation with sigmoid compression & mate display |
-| 🔍 **Engine Lines** | Top 3 MultiPV lines with depth badge |
-| 🏹 **Best Move Arrow** | Canvas overlay showing Stockfish's recommended move |
-| 📋 **Move Log** | Scrollable algebraic notation log with current-move highlight |
-| 🔄 **Analysis Mode** | Scrub through game history with ←→ arrow keys or log clicks |
-| 🏷 **Move Classification** | Brilliant · Great · Good · Book · Inaccuracy · Mistake · Blunder |
-| ♟ **Full Chess Rules** | Castling · En passant · Promotion dialog · Threefold repetition · 50-move rule |
-| 📱 **Responsive** | Works on mobile, tablet, and desktop |
+| **AI Opponent** | Stockfish 10 via Web Worker — UI never freezes |
+| **Difficulty** | Easy (100ms) · Medium (500ms) · Hard (2000ms) think time |
+| **Time Controls** | Unlimited · 1 · 3 · 5 · 10 minute clocks (RAF-based, no drift) |
+| **Color Choice** | Play as White, Black, or Random |
+| **Eval Bar** | Live centipawn evaluation with sigmoid compression & mate display |
+| **Engine Lines** | Top 3 MultiPV lines with depth badge |
+| **Best Move Arrow** | Canvas overlay showing Stockfish's recommended move |
+| **Move Log** | Scrollable algebraic notation log with current-move highlight |
+| **Analysis Mode** | Scrub through game history with ←→ arrow keys or log clicks |
+| **Move Classification** | Brilliant · Great · Good · Book · Inaccuracy · Mistake · Blunder |
+| **Full Chess Rules** | Castling · En passant · Promotion dialog · Threefold repetition · 50-move rule |
+| **Responsive** | Works on mobile, tablet, and desktop |
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - **Node.js** (any recent version — only used to run the dev server)
@@ -44,11 +44,11 @@ npx -y serve . --listen 3000
 # → http://localhost:3000
 ```
 
-> ⚠️ **You must use a local HTTP server.** Opening `index.html` directly (`file://`) will NOT work because browsers block ES6 `import` statements and `new Worker()` on the `file://` protocol.
+> **You must use a local HTTP server.** Opening `index.html` directly (`file://`) will NOT work because browsers block ES6 `import` statements and `new Worker()` on the `file://` protocol.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 AIChessGame/
@@ -71,7 +71,7 @@ AIChessGame/
 
 ---
 
-## 🧠 Architecture
+## Architecture
 
 ```
 main.js
@@ -96,7 +96,7 @@ main.js
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## Keyboard Shortcuts
 
 | Key | Action |
 |---|---|
@@ -109,7 +109,7 @@ main.js
 
 ---
 
-## 🎯 Move Classification
+## Move Classification
 
 After each game, moves are classified by centipawn loss vs. Stockfish's best:
 
@@ -125,7 +125,7 @@ After each game, moves are classified by centipawn loss vs. Stockfish's best:
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -138,6 +138,6 @@ After each game, moves are classified by centipawn loss vs. Stockfish's best:
 
 ---
 
-## 📝 License
+## License
 
 MIT — free to use, modify, and distribute.
