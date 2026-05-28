@@ -1,4 +1,4 @@
-# BRUTAL CHESS
+# WEB CHESS
 
 A fully-featured, modular AI Chess Web App built with **vanilla JavaScript ES6 modules** and a **dark brutalist** aesthetic. Powered by Stockfish 10 for engine analysis.
 
